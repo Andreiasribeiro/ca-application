@@ -25,11 +25,7 @@ import io.jsonwebtoken.Claims;
 @CrossOrigin("*")
 public class CAController {
 
-	//String[] users = { "Amilcar", "David", "Greg" };
-	//String[] password = { "secret1", "secret2", "secret3" };
-	
 	HashMap<String, String> users;
-	
 
 	private Map<String, ArrayList<Expense>> trips;
 	// private List<Expense> trips;
@@ -40,10 +36,11 @@ public class CAController {
 	public CAController() {
 		trips = new HashMap<>();
 		users = new HashMap<>();
-		
+
 		users.put("Amilcar", "secret1");
 		users.put("David", "secret2");
 		users.put("Greg", "secret3");
+		
 		// trips = new ArrayList<Expense>()
 	}
 
@@ -51,18 +48,18 @@ public class CAController {
 	// use JWT token to keep the user login -86400000 = one day in milliseconds
 	@GetMapping("/login") // username and password
 	public String login(@RequestParam(name = "username", required = true) String username,
-						@RequestParam(name = "password", required = true) String password) {
+			@RequestParam(name = "password", required = true) String password) {
 
 		for (String key : users.keySet()) {
-			if(key.equals(username) && users.get(key).equals(password)) {
+			if (key.equals(username) && users.get(key).equals(password)) {
 				return JWTIssuer.createJWT(username, "ca-application", password, 86400000);
 			}
 		}
-		
+
 //		for (int i = 0; i < 3; i++) {
-	//		if (users[i].contentEquals(username) && password.contentEquals(password)) {
-				
-		//	}
+		// if (users[i].contentEquals(username) && password.contentEquals(password)) {
+
+		// }
 
 //		}
 		// TODO return 401 error (Unauthorized), when the username or password do not
@@ -79,7 +76,9 @@ public class CAController {
 	public Map<String, ArrayList<Expense>> addExpense(@PathVariable("trip") String trip,
 			@RequestHeader(name = "Authorization", required = true) String token,
 			@RequestBody(required = true) Expense expense) {
+		
 		// TODO*****check if the trip is open
+		// receive the token, verify and store
 		// if not open, send back the http code 422 -unprocessable entity
 		// class 07/05 1:00h
 		// if (trips.get("TripName").isOpen) {Throw RuntimeException}
@@ -121,10 +120,9 @@ public class CAController {
 	@PostMapping("/{trip}/close")
 	public void closeTrip(String name) {
 
-		
 		if (tripClosed == true) {
 			// trips.entrySet(null);
-			//trips.notify();
+			// trips.notify();
 		}
 
 	}
