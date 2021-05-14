@@ -25,8 +25,11 @@ import io.jsonwebtoken.Claims;
 @CrossOrigin("*")
 public class CAController {
 
-	String[] users = { "Amilcar", "David", "Greg" };
-	String[] password = { "password_amilcar", "password_david", "password_greg" };
+	//String[] users = { "Amilcar", "David", "Greg" };
+	//String[] password = { "secret1", "secret2", "secret3" };
+	
+	HashMap<String, String> users;
+	
 
 	private Map<String, ArrayList<Expense>> trips;
 	// private List<Expense> trips;
@@ -36,6 +39,11 @@ public class CAController {
 	// constructor
 	public CAController() {
 		trips = new HashMap<>();
+		users = new HashMap<>();
+		
+		users.put("Amilcar", "secret1");
+		users.put("David", "secret2");
+		users.put("Greg", "secret3");
 		// trips = new ArrayList<Expense>()
 	}
 
@@ -43,14 +51,20 @@ public class CAController {
 	// use JWT token to keep the user login -86400000 = one day in milliseconds
 	@GetMapping("/login") // username and password
 	public String login(@RequestParam(name = "username", required = true) String username,
-			@RequestParam(name = "password", required = true) String password) {
+						@RequestParam(name = "password", required = true) String password) {
 
-		for (int i = 0; i < 3; i++) {
-			if (users[i].contentEquals(username) && password.contentEquals(password)) {
-				return JWTIssuer.createJWT(username, "ca-application", username, 86400000);
+		for (String key : users.keySet()) {
+			if(key.equals(username) && users.get(key).equals(password)) {
+				return JWTIssuer.createJWT(username, "ca-application", password, 86400000);
 			}
-
 		}
+		
+//		for (int i = 0; i < 3; i++) {
+	//		if (users[i].contentEquals(username) && password.contentEquals(password)) {
+				
+		//	}
+
+//		}
 		// TODO return 401 error (Unauthorized), when the username or password do not
 		// match.Expection with
 
